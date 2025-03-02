@@ -4,15 +4,20 @@ namespace App;
 
 require 'vendor/autoload.php';
 
-use Controller\HomeController;
-use Controller\UserController;
+use HomeController\HomeController;
+use Http\Request;
+use Http\Response;
 use Router\Router;
+use UserController\UserController;
 
-header("Content-Type:application/json");
+$request = new Request();
+$response = new Response();
 
-$router = new Router();
+$router = new Router($request->getUrl(), $request->getHttpMethod());
 $router->get("/", [HomeController::class, 'index']);
 $router->get("/about", [HomeController::class, 'about']);
 $router->get('/users/{userId}', [UserController::class, 'showUserProfile']);
+$router->dispatch();
 
-echo $router->dispatch();
+$response->setHeader('Content-Type: application/json; charset=UTF-8');
+$response->render();

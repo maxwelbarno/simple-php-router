@@ -1,22 +1,24 @@
 <?php
 
-namespace Controller;
+namespace HomeController;
 
-class HomeController
+use Controller\Controller;
+
+class HomeController extends Controller
 {
     public function index()
     {
-        http_response_code(200);
-        $response['code'] = "HTTP/1.1 200 OK";
-        $response['message'] = "welcome Home!";
-        return json_encode($response);
+        $data['code'] = "HTTP/1.1 200 OK";
+        $data['message'] = "welcome Home!";
+        $this->response->setStatus(200);
+        $this->response->setContent($data);
     }
 
     public function about()
     {
-        http_response_code(200);
-        $response['code'] = "HTTP/1.1 200 OK";
-        $response['message'] = "About Us!";
-        return json_encode($response);
+        $data['code'] = "HTTP/1.1 200 OK";
+        $data['message'] = "About Us!";
+        $this->response->setStatus(200);
+        $this->response->setContent($data);
     }
 }

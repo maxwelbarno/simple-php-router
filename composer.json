@@ -4,7 +4,11 @@
   "autoload": {
     "psr-4": {
       "Router\\": "src/",
-      "Controller\\": "src/controllers/"
+      "UserController\\": "src/controllers/",
+      "HomeController\\": "src/controllers/",
+      "Controller\\": "src/",
+      "Http\\": "http/",
+      "Exceptions\\": "exceptions/"
     }
   },
   "authors": [

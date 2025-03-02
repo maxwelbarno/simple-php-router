@@ -2,12 +2,27 @@
 
 namespace Router;
 
+use Exceptions\CustomException;
+
 class Router
 {
     private array $routes = [];
+    private $url;
+    private $http_request_method;
+    private $response;
+    private $accepted_methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTION'];
+
+
+    public function __construct($url, $http_method)
+    {
+        $this->url = $url;
+        $this->http_request_method = $this->validateHttpMethod($http_method);
+        $this->response = $GLOBALS['response'];
+    }
 
     private function register($route, $method, $callback)
     {
+        $method = $this->validateHttpMethod($method);
         $route = trim($route, "/");
         $this->routes[$method][$route] = $callback;
     }
@@ -20,20 +35,18 @@ class Router
     public function dispatch()
     {
         // Get the requested route.
-        $requestedRoute = trim($_SERVER['REQUEST_URI'], '/') ?? '/';
-
-        $routes = $this->routes[$_SERVER['REQUEST_METHOD']];
+        $requestedRoute = $this->url;
+        $routes = $this->routes[$this->http_request_method];
+        $convertToRegex = function ($matches) {
+            return isset($matches[1]) ? '(' . $matches[2] . ')' : '([a-zA-Z0-9_-]+)';
+        };
 
         foreach ($routes as $route => $callback) {
             // Transform route to regex pattern.
-            $routeRegex = preg_replace_callback('/{\w+(:([^}]+))?}/', function ($matches) {
-                return isset($matches[1]) ? '(' . $matches[2] . ')' : '([a-zA-Z0-9_-]+)';
-            }, $route);
+            $routeRegex = preg_replace_callback('/{\w+(:([^}]+))?}/', $convertToRegex, $route);
 
             // Add the start and end delimiters.
             $routeRegex = '@^' . $routeRegex . '$@';
-
-            echo $routeRegex . ", ";
 
             // Check if the requested route matches the current route pattern.
             if (preg_match($routeRegex, $requestedRoute, $matches)) {
@@ -42,7 +55,7 @@ class Router
 
                 $routeParameterValues = $matches;
 
-                // Find all route params names from route and save in $routeParameterNames
+                // Find all route parameter names from route and save in $routeParameterNames
                 $routeParameterNames = [];
                 if (preg_match_all('/{(\w+)(:[^}]+)?}/', $route, $matches)) {
                     $routeParameterNames = $matches[1];
@@ -51,12 +64,10 @@ class Router
                 // Combine between route parameter names and user provided parameter values.
                 $routeParameters = array_combine($routeParameterNames, $routeParameterValues);
 
-
-
                 return  $this->resolveCallback($callback, $routeParameters);
             }
         }
-        return $this->abort('404 Page not found');
+        return $this->abort('Route Not Found');
     }
 
     private function resolveCallback($callback, $routeParameters)
@@ -70,9 +81,19 @@ class Router
 
     private function abort(string $message, int $code = 404)
     {
+        $this->response->setStatus(404);
+        $this->response->setContent(["code" => $code, "error" => $message]);
+    }
 
-        http_response_code($code);
-        echo $message;
-        exit();
+    private function validateHttpMethod($method)
+    {
+        try {
+            if (in_array(strtoupper($method), $this->accepted_methods)) {
+                return $method;
+            }
+            throw new CustomException("Invalid HTTP method " . $method);
+        } catch (CustomException $exception) {
+            $exception->render();
+        }
     }
 }

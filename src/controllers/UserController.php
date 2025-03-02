@@ -1,14 +1,16 @@
 <?php
 
-namespace Controller;
+namespace UserController;
 
-class UserController
+use Controller\Controller;
+
+class UserController extends Controller
 {
     public function showUserProfile($userId)
     {
-        http_response_code(200);
-        $response['code'] = "HTTP/1.1 200 OK";
-        $response['message'] = "Showing user profile for ID: {$userId}";
-        return json_encode($response);
+        $data['code'] = "HTTP/1.1 200 OK";
+        $data['message'] = "Showing user profile for ID: {$userId}";
+        $this->response->setStatus(200);
+        $this->response->setContent($data);
     }
 }
