@@ -8,7 +8,9 @@
       "HomeController\\": "src/controllers/",
       "Controller\\": "src/",
       "Http\\": "http/",
-      "Exceptions\\": "exceptions/"
+      "Exceptions\\": "exceptions/",
+      "DB\\": "db/",
+      "Model\\": "src/models/"
     }
   },
   "authors": [

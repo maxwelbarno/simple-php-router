@@ -12,12 +12,13 @@ use UserController\UserController;
 
 $request = new Request();
 $response = new Response();
+$response->setHeader('Content-Type: application/json; charset=UTF-8');
 
 $router = new Router($request->getUrl(), $request->getHttpMethod());
 $router->get("/", [HomeController::class, 'index']);
 $router->get("/about", [HomeController::class, 'about']);
 $router->get('/users/{userId}', [UserController::class, 'showUserProfile']);
-$router->dispatch();
+$router->get('/users', [UserController::class, 'getUsers']);
 
-$response->setHeader('Content-Type: application/json; charset=UTF-8');
+$router->dispatch();
 $response->render();
