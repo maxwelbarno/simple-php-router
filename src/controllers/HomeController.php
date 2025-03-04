@@ -13,12 +13,4 @@ class HomeController extends Controller
         $this->response->setStatus(200);
         $this->response->setContent($data);
     }
-
-    public function about()
-    {
-        $data['code'] = "HTTP/1.1 200 OK";
-        $data['message'] = "About Us!";
-        $this->response->setStatus(200);
-        $this->response->setContent($data);
-    }
 }

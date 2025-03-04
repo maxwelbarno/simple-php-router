@@ -16,7 +16,6 @@ $response->setHeader('Content-Type: application/json; charset=UTF-8');
 
 $router = new Router($request->getUrl(), $request->getHttpMethod());
 $router->get("/", [HomeController::class, 'index']);
-$router->get("/about", [HomeController::class, 'about']);
 $router->get('/users/{id}', [UserController::class, 'getUser']);
 $router->get('/users', [UserController::class, 'getUsers']);
 $router->post('/users', [UserController::class, 'createUser']);
