@@ -24,10 +24,16 @@ class UserController extends Controller
     {
         $this->user = new User();
         $user = $this->user->findById($id);
-        $data['code'] = "HTTP/1.1 200 OK";
-        $data["data"] = $user;
-        $this->response->setStatus(200);
-        $this->response->setContent($data);
+        if ($user) {
+            $data['code'] = "HTTP/1.1 200 OK";
+            $data["data"] = $user;
+            $this->response->setStatus(200);
+            $this->response->setContent($data);
+        } else {
+            $data['code'] = "HTTP/1.1 404 Not Found";
+            $this->response->setStatus(404);
+            $this->response->setContent($data);
+        }
     }
 
     public function getUsers()
@@ -44,14 +50,29 @@ class UserController extends Controller
     {
         $request_body = $this->request->getRequestBody();
         $this->user = new User();
-        $res = $this->user->update($request_body, $id);
-        if ($res) {
+        if ($this->user->findById($id)) {
+            $this->user->update($request_body, $id);
             $data['code'] = "HTTP/1.1 200 OK";
             $this->response->setStatus(200);
             $this->response->setContent($data);
         } else {
-            $data['code'] = "HTTP/1.1 400 Bad Request";
-            $this->response->setStatus(400);
+            $data['code'] = "HTTP/1.1 404 Not Found";
+            $this->response->setStatus(404);
+            $this->response->setContent($data);
+        }
+    }
+
+    public function deleteUser($id)
+    {
+        $this->user = new User();
+        if ($this->user->findById($id)) {
+            $this->user->delete($id);
+            $data['code'] = "HTTP/1.1 200 OK";
+            $this->response->setStatus(200);
+            $this->response->setContent($data);
+        } else {
+            $data['code'] = "HTTP/1.1 404 Not Found";
+            $this->response->setStatus(404);
             $this->response->setContent($data);
         }
     }

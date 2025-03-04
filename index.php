@@ -21,7 +21,7 @@ $router->get('/users/{id}', [UserController::class, 'getUser']);
 $router->get('/users', [UserController::class, 'getUsers']);
 $router->post('/users', [UserController::class, 'createUser']);
 $router->put('/users/{id}', [UserController::class, 'updateUser']);
-
+$router->delete('/users/{id}', [UserController::class, 'deleteUser']);
 
 $router->dispatch();
 $response->render();

@@ -71,4 +71,16 @@ class User
             $e->render();
         }
     }
+
+    public function delete(string $id): int
+    {
+        $sql = "DELETE FROM guests WHERE id = :id";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (CustomException $e) {
+            $e->render();
+        }
+    }
 }

@@ -36,9 +36,15 @@ class Router
     {
         $this->register($route, 'POST', $callback);
     }
+
     public function put($route, $callback)
     {
         $this->register($route, 'PUT', $callback);
+    }
+
+    public function delete($route, $callback)
+    {
+        $this->register($route, 'DELETE', $callback);
     }
 
     public function dispatch()
