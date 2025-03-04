@@ -36,6 +36,10 @@ class Router
     {
         $this->register($route, 'POST', $callback);
     }
+    public function put($route, $callback)
+    {
+        $this->register($route, 'PUT', $callback);
+    }
 
     public function dispatch()
     {

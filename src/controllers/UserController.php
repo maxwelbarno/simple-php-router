@@ -31,9 +31,26 @@ class UserController extends Controller
     {
         $request_body = $this->request->getRequestBody();
         $this->user = new User();
-        $data['message'] = "HTTP/1.1 201 Created";
-        $this->response->setStatus(201);
-        $this->user->create($request_body);
-        $this->response->setContent($data);
+        $res = $this->user->create($request_body);
+        if ($res) {
+            $data['code'] = "HTTP/1.1 201 Created";
+            $this->response->setContent($data);
+        }
+    }
+
+    public function updateUser($id)
+    {
+        $request_body = $this->request->getRequestBody();
+        $this->user = new User();
+        $res = $this->user->update($request_body, $id);
+        if ($res) {
+            $data['code'] = "HTTP/1.1 200 OK";
+            $this->response->setStatus(200);
+            $this->response->setContent($data);
+        } else {
+            $data['code'] = "HTTP/1.1 400 Bad Request";
+            $this->response->setStatus(400);
+            $this->response->setContent($data);
+        }
     }
 }

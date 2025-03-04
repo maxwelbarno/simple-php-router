@@ -43,4 +43,19 @@ class User
             $e->render();
         }
     }
+
+    public function update(array $data, string $id): int
+    {
+        $sql = "UPDATE guests SET firstname = :firstname, lastname = :lastname, email = :email WHERE id = :id";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(":firstname", $data['firstname'], PDO::PARAM_STR);
+            $stmt->bindValue(":lastname", $data['lastname'], PDO::PARAM_STR);
+            $stmt->bindValue(":email", $data['email'], PDO::PARAM_STR);
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (CustomException $e) {
+            $e->render();
+        }
+    }
 }

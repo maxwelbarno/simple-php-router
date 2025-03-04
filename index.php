@@ -20,6 +20,8 @@ $router->get("/about", [HomeController::class, 'about']);
 $router->get('/users/{userId}', [UserController::class, 'showUserProfile']);
 $router->get('/users', [UserController::class, 'getUsers']);
 $router->post('/users', [UserController::class, 'createUser']);
+$router->put('/users/{id}', [UserController::class, 'updateUser']);
+
 
 $router->dispatch();
 $response->render();
