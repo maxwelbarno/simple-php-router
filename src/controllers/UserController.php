@@ -26,4 +26,14 @@ class UserController extends Controller
         $this->response->setStatus(200);
         $this->response->setContent($data);
     }
+
+    public function createUser()
+    {
+        $request_body = $this->request->getRequestBody();
+        $this->user = new User();
+        $data['message'] = "HTTP/1.1 201 Created";
+        $this->response->setStatus(201);
+        $this->user->create($request_body);
+        $this->response->setContent($data);
+    }
 }

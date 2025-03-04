@@ -21,6 +21,16 @@ class Request
         return trim($url, '/') ?? '/';
     }
 
+    public function getRequestBody($key = '')
+    {
+        $post_data = file_get_contents("php://input");
+        $request = json_decode($post_data, true);
+        if ($key != '') {
+            return isset($request[$key]) ? $this->clean($request[$key]) : null;
+        }
+        return $request;
+    }
+
     private function clean($data)
     {
         return trim(htmlspecialchars($data, ENT_COMPAT, 'UTF-8'));

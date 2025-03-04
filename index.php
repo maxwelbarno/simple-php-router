@@ -19,6 +19,7 @@ $router->get("/", [HomeController::class, 'index']);
 $router->get("/about", [HomeController::class, 'about']);
 $router->get('/users/{userId}', [UserController::class, 'showUserProfile']);
 $router->get('/users', [UserController::class, 'getUsers']);
+$router->post('/users', [UserController::class, 'createUser']);
 
 $router->dispatch();
 $response->render();

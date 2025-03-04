@@ -32,6 +32,11 @@ class Router
         $this->register($route, 'GET', $callback);
     }
 
+    public function post($route, $callback)
+    {
+        $this->register($route, 'POST', $callback);
+    }
+
     public function dispatch()
     {
         // Get the requested route.
