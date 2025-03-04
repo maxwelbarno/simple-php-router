@@ -4,11 +4,15 @@ namespace App;
 
 require 'vendor/autoload.php';
 
+use Dotenv\Dotenv;
 use HomeController\HomeController;
 use Http\Request;
 use Http\Response;
 use Router\Router;
 use UserController\UserController;
+
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 $request = new Request();
 $response = new Response();

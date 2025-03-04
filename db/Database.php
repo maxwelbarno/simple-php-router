@@ -8,10 +8,18 @@ use PDOException;
 
 class Database extends Controller
 {
-    private $host = "localhost";
-    private $username = "admin";
-    private $password = "admin123";
-    private $db = "phpDBtest";
+    private $host;
+    private $username;
+    private $password;
+    private $db;
+
+    public function __construct()
+    {
+        $this->host = $_ENV['DB_HOST'];
+        $this->username = $_ENV['DB_USER'];
+        $this->password = $_ENV['DB_PASS'];
+        $this->db = $_ENV['DB_NAME'];
+    }
 
     public function connect()
     {
@@ -26,7 +34,6 @@ class Database extends Controller
             header('Content-Type: application/json; charset=UTF-8');
             http_response_code(500);
             echo json_encode(["code" => 500, "message" => $e->getMessage()]);
-
             exit();
         }
     }

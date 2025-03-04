@@ -48,6 +48,7 @@ class UserController extends Controller
         $users = $this->user->findAll();
         $data['code'] = "HTTP/1.1 200 OK";
         $data["data"] = $users;
+
         getResponse($this->response, $data, 200);
     }
 
