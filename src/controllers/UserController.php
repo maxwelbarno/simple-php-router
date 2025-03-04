@@ -9,10 +9,23 @@ class UserController extends Controller
 {
     private $user;
 
-    public function showUserProfile($userId)
+    public function createUser()
     {
+        $request_body = $this->request->getRequestBody();
+        $this->user = new User();
+        $res = $this->user->create($request_body);
+        if ($res) {
+            $data['code'] = "HTTP/1.1 201 Created";
+            $this->response->setContent($data);
+        }
+    }
+
+    public function getUser($id)
+    {
+        $this->user = new User();
+        $user = $this->user->findById($id);
         $data['code'] = "HTTP/1.1 200 OK";
-        $data['message'] = "Showing user profile for ID: {$userId}";
+        $data["data"] = $user;
         $this->response->setStatus(200);
         $this->response->setContent($data);
     }
@@ -25,17 +38,6 @@ class UserController extends Controller
         $data["data"] = $users;
         $this->response->setStatus(200);
         $this->response->setContent($data);
-    }
-
-    public function createUser()
-    {
-        $request_body = $this->request->getRequestBody();
-        $this->user = new User();
-        $res = $this->user->create($request_body);
-        if ($res) {
-            $data['code'] = "HTTP/1.1 201 Created";
-            $this->response->setContent($data);
-        }
     }
 
     public function updateUser($id)

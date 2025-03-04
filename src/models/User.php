@@ -16,6 +16,19 @@ class User
         $this->conn = $db->connect();
     }
 
+    public function findById(string $id): array | bool
+    {
+        $sql = "SELECT * FROM guests WHERE id=:id";
+        try {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (CustomException $e) {
+            $e->render();
+        }
+    }
+
     public function findAll()
     {
         $sql = "SELECT * FROM guests";
