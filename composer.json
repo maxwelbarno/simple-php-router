@@ -11,7 +11,10 @@
       "Exceptions\\": "exceptions/",
       "DB\\": "db/",
       "Model\\": "src/models/"
-    }
+    },
+    "files": [
+      "helpers/index.php"
+    ]
   },
   "authors": [
     {

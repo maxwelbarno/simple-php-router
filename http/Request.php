@@ -2,12 +2,14 @@
 
 namespace Http;
 
+use function Helpers\clean;
+
 class Request
 {
     public function getServer($key = '')
     {
         $key = strtoupper($key);
-        return isset($_SERVER[$key]) ? $this->clean($_SERVER[$key]) : $this->clean($_SERVER);
+        return isset($_SERVER[$key]) ? clean($_SERVER[$key]) : clean($_SERVER);
     }
 
     public function getHttpMethod()
@@ -26,13 +28,8 @@ class Request
         $post_data = file_get_contents("php://input");
         $request = json_decode($post_data, true);
         if ($key != '') {
-            return isset($request[$key]) ? $this->clean($request[$key]) : null;
+            return isset($request[$key]) ? clean($request[$key]) : null;
         }
         return $request;
-    }
-
-    private function clean($data)
-    {
-        return trim(htmlspecialchars($data, ENT_COMPAT, 'UTF-8'));
     }
 }
