@@ -3,89 +3,113 @@
 namespace UserController;
 
 use Controller\Controller;
+use DataMapper\UserMapper;
 use Exceptions\CustomException;
 use Model\User;
 
-use function Helpers\getResponse;
+use function Helpers\response;
 
 class UserController extends Controller
 {
-    private $user;
+    private $data;
 
     public function createUser()
     {
-        $request_body = $this->request->getRequestBody();
-        $this->user = new User();
-        $res = $this->user->create($request_body);
-        if ($res) {
-            $data['code'] = "HTTP/1.1 201 Created";
-            getResponse($this->response, $data, 201);
+        try {
+            $request_body = $this->request->getRequestBody();
+            $user = new User(($request_body));
+            $this->data = new UserMapper();
+            $res = $this->data->save($user);
+            if ($res) {
+                $data['code'] = "HTTP/1.1 201 Created";
+                response($this->response, $data, 201);
+            } else {
+                throw new CustomException("Error in Request Body");
+            }
+        } catch (CustomException $e) {
+            $data['code'] = "HTTP/1.1 400 Bad Request";
+            $data["message"] = $e->getMessage();
+            response($this->response, $data, 400);
         }
     }
 
     public function getUser($id)
     {
         try {
-            $this->user = new User();
-            $user = $this->user->findById($id);
+            $this->data = new UserMapper();
+            $user = $this->data->findOne($id);
             if ($user) {
                 $data['code'] = "HTTP/1.1 200 OK";
-                $data["data"] = $user;
-                getResponse($this->response, $data, 200);
+                $data["data"] = array_combine(["id","firstname", "lastname", "email"], (array)$user);
+                response($this->response, $data, 200);
             } else {
                 throw new CustomException("User with ID {$id} Not Found");
             }
         } catch (CustomException $e) {
             $data['code'] = "HTTP/1.1 404 Not Found";
             $data["message"] = $e->getMessage();
-            getResponse($this->response, $data, 404);
+            response($this->response, $data, 404);
         }
     }
 
     public function getUsers()
     {
-        $this->user = new User();
-        $users = $this->user->findAll();
-        $data['code'] = "HTTP/1.1 200 OK";
-        $data["data"] = $users;
-
-        getResponse($this->response, $data, 200);
+        try {
+            $this->data = new UserMapper();
+            $users = $this->data->findAll();
+            if ($users) {
+                $list = [];
+                foreach ($users as $user) {
+                    $list[] = array_combine(["id","firstname", "lastname", "email"], (array)$user);
+                }
+                $data['code'] = "HTTP/1.1 200 OK";
+                $data["data"] = $list;
+                response($this->response, $data, 200);
+            } else {
+                throw new CustomException("No User Found");
+            }
+        } catch (CustomException $e) {
+            $data['code'] = "HTTP/1.1 404 Not Found";
+            $data["message"] = $e->getMessage();
+            response($this->response, $data, 404);
+        }
     }
 
     public function updateUser($id)
     {
         try {
             $request_body = $this->request->getRequestBody();
-            $this->user = new User();
-            if ($this->user->findById($id)) {
-                $this->user->update($request_body, $id);
+            $user = new User(($request_body));
+            $this->data = new UserMapper();
+            if ($this->data->findOne($id)) {
+                $this->data->update($user, $id);
                 $data['code'] = "HTTP/1.1 200 OK";
-                getResponse($this->response, $data, 200);
+                response($this->response, $data, 200);
             } else {
                 throw new CustomException("User with ID {$id} Not Found");
             }
         } catch (CustomException $e) {
             $data['code'] = "HTTP/1.1 404 Not Found";
             $data["message"] = $e->getMessage();
-            getResponse($this->response, $data, 404);
+            response($this->response, $data, 404);
         }
     }
 
     public function deleteUser($id)
     {
         try {
-            $this->user = new User();
-            if ($this->user->findById($id)) {
-                $this->user->delete($id);
+            $this->data = new UserMapper();
+            if ($this->data->findOne($id)) {
+                $this->data->delete($id);
                 $data['code'] = "HTTP/1.1 200 OK";
-                getResponse($this->response, $data, 200);
+                response($this->response, $data, 200);
             } else {
                 throw new CustomException("User with ID {$id} Not Found");
             }
         } catch (CustomException $e) {
             $data['code'] = "HTTP/1.1 404 Not Found";
             $data["message"] = $e->getMessage();
-            getResponse($this->response, $data, 404);
+            response($this->response, $data, 404);
         }
     }
 }

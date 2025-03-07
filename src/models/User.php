@@ -2,85 +2,38 @@
 
 namespace Model;
 
-use DB\Database;
-use Exceptions\CustomException;
-use PDO;
-
 class User
 {
-    private PDO $conn;
+    private $id;
+    private $firstname;
+    private $lastname;
+    private $email;
 
-    public function __construct()
+    public function __construct($data)
     {
-        $db = new Database();
-        $this->conn = $db->connect();
+        $this->id = $data['id'];
+        $this->firstname = $data['firstname'];
+        $this->lastname = $data['lastname'];
+        $this->email = $data['email'];
     }
 
-    public function findById(string $id): array | bool
+    public function getId()
     {
-        $sql = "SELECT * FROM guests WHERE id=:id";
-        try {
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (CustomException $e) {
-            $e->render();
-        }
+        return $this->id;
     }
 
-    public function findAll()
+    public function getFirstName()
     {
-        $sql = "SELECT * FROM guests";
-        try {
-            if ($this->conn) {
-                $statement = $this->conn->query($sql);
-                $statement->execute();
-                return $statement->fetchAll(PDO::FETCH_ASSOC);
-            }
-        } catch (CustomException $e) {
-            $e->render();
-        }
+        return $this->firstname;
     }
 
-    public function create(array $data): int
+    public function getLastName()
     {
-        $sql = "INSERT INTO guests(firstname, lastname, email) VALUES(:firstname,:lastname,:email)";
-        try {
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindValue(":firstname", $data['firstname'], PDO::PARAM_STR);
-            $stmt->bindValue(":lastname", $data['lastname'], PDO::PARAM_STR);
-            $stmt->bindValue(":email", $data['email'], PDO::PARAM_STR);
-            return $stmt->execute();
-        } catch (CustomException $e) {
-            $e->render();
-        }
+        return $this->lastname;
     }
 
-    public function update(array $data, string $id): int
+    public function getEmail()
     {
-        $sql = "UPDATE guests SET firstname = :firstname, lastname = :lastname, email = :email WHERE id = :id";
-        try {
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindValue(":firstname", $data['firstname'], PDO::PARAM_STR);
-            $stmt->bindValue(":lastname", $data['lastname'], PDO::PARAM_STR);
-            $stmt->bindValue(":email", $data['email'], PDO::PARAM_STR);
-            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
-            return $stmt->execute();
-        } catch (CustomException $e) {
-            $e->render();
-        }
-    }
-
-    public function delete(string $id): int
-    {
-        $sql = "DELETE FROM guests WHERE id = :id";
-        try {
-            $stmt = $this->conn->prepare($sql);
-            $stmt->bindValue(":id", $id, PDO::PARAM_INT);
-            return $stmt->execute();
-        } catch (CustomException $e) {
-            $e->render();
-        }
+        return $this->email;
     }
 }

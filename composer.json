@@ -10,7 +10,9 @@
       "Http\\": "http/",
       "Exceptions\\": "exceptions/",
       "DB\\": "db/",
-      "Model\\": "src/models/"
+      "Model\\": "src/models/",
+      "Query\\": "src/",
+      "DataMapper\\": "src/"
     },
     "files": [
       "helpers/index.php"

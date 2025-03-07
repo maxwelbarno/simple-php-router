@@ -2,7 +2,7 @@
 
 namespace Helpers;
 
-function getResponse($response, $data, $code)
+function response($response, $data, $code)
 {
     $response->setStatus($code);
     $response->setContent($data);
