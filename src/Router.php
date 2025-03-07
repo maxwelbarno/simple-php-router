@@ -4,7 +4,7 @@ namespace Router;
 
 use Exceptions\CustomException;
 
-use function Helpers\getResponse;
+use function Helpers\response;
 
 class Router
 {
@@ -98,7 +98,7 @@ class Router
 
     private function abort(string $message, int $code = 404)
     {
-        getResponse($this->response, ["code" => $code, "error" => $message], 404);
+        response($this->response, ["code" => $code, "error" => $message], 404);
     }
 
     private function validateHttpMethod($method)

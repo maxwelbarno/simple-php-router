@@ -5,16 +5,14 @@ namespace Model;
 class User
 {
     private $id;
-    private $firstname;
-    private $lastname;
-    private $email;
+    private $username;
+    private $password;
 
     public function __construct($data)
     {
         $this->id = $data['id'];
-        $this->firstname = $data['firstname'];
-        $this->lastname = $data['lastname'];
-        $this->email = $data['email'];
+        $this->username = $data['username'];
+        $this->password = $data['password'];
     }
 
     public function getId()
@@ -22,18 +20,13 @@ class User
         return $this->id;
     }
 
-    public function getFirstName()
+    public function getUsername()
     {
-        return $this->firstname;
+        return $this->username;
     }
 
-    public function getLastName()
+    public function getPassword()
     {
-        return $this->lastname;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
+        return $this->password;
     }
 }

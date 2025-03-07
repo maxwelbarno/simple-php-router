@@ -14,19 +14,22 @@ class UserMapper
 
     public function __construct()
     {
-        $this->table = "guests";
+        $this->table = "users";
         $this->primary_key = "id";
         $this->query = new Query($this->table, $this->primary_key);
     }
 
     public function save(User $user)
     {
-        $data = [
-            "firstname" => $user->getFirstName(),
-            "lastname" => $user->getLastName(),
-            "email" => $user->getEmail()
-        ];
-        return $this->query->create($data);
+        try {
+            $data = [
+                "username" => $user->getUsername(),
+                "password" => $user->getPassword()
+            ];
+            return $this->query->create($data);
+        } catch (CustomException $e) {
+            $e->render();
+        }
     }
 
     public function findAll()
@@ -60,9 +63,8 @@ class UserMapper
     public function update(User $user, $id)
     {
         $data = [
-            "firstname" => $user->getFirstName(),
-            "lastname" => $user->getLastName(),
-            "email" => $user->getEmail()
+            "username" => $user->getUsername(),
+            "password" => $user->getPassword(),
         ];
         return $this->query->update($data, $id);
     }

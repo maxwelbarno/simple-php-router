@@ -23,11 +23,10 @@ class Query
     public function create(array $data): int
     {
         try {
-            $sql = "INSERT INTO guests(firstname, lastname, email) VALUES(:firstname,:lastname,:email)";
+            $sql = "INSERT INTO $this->table(username, password) VALUES(:username,:password)";
             $stmt = $this->conn->prepare($sql);
-            $this->bind($stmt, ":firstname", $data['firstname']);
-            $this->bind($stmt, ":lastname", $data['lastname']);
-            $this->bind($stmt, ":email", $data['email']);
+            $this->bind($stmt, ":username", $data['username']);
+            $this->bind($stmt, ":password", $data['password']);
             return $stmt->execute();
         } catch (CustomException $e) {
             $e->render();
@@ -60,12 +59,11 @@ class Query
     public function update(array $data, string $id): int
     {
         try {
-            $sql = "UPDATE guests SET firstname = :firstname, lastname = :lastname, email = :email WHERE id = :id";
+            $sql = "UPDATE $this->table SET username = :username, password = :password WHERE id = :id";
             $stmt = $this->conn->prepare($sql);
-            $this->bind($stmt, ":firstname", $data['firstname']);
-            $this->bind($stmt, ":lastname", $data['lastname']);
-            $this->bind($stmt, ":email", $data['email']);
             $this->bind($stmt, ":id", $id);
+            $this->bind($stmt, ":username", $data['username']);
+            $this->bind($stmt, ":password", $data['password']);
             return $stmt->execute();
         } catch (CustomException $e) {
             $e->render();
@@ -75,7 +73,7 @@ class Query
     public function delete(string $id): int
     {
         try {
-            $sql = "DELETE FROM guests WHERE id = :id";
+            $sql = "DELETE FROM $this->table  WHERE id = :id";
             $stmt = $this->conn->prepare($sql);
             $this->bind($stmt, ":id", $id, PDO::PARAM_INT);
             return $stmt->execute();

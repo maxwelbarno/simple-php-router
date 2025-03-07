@@ -40,7 +40,7 @@ class UserController extends Controller
             $user = $this->data->findOne($id);
             if ($user) {
                 $data['code'] = "HTTP/1.1 200 OK";
-                $data["data"] = array_combine(["id","firstname", "lastname", "email"], (array)$user);
+                $data["data"] = array_combine(["id","username", "password"], (array)$user);
                 response($this->response, $data, 200);
             } else {
                 throw new CustomException("User with ID {$id} Not Found");
@@ -60,7 +60,7 @@ class UserController extends Controller
             if ($users) {
                 $list = [];
                 foreach ($users as $user) {
-                    $list[] = array_combine(["id","firstname", "lastname", "email"], (array)$user);
+                    $list[] = array_combine(["id","username", "password"], (array)$user);
                 }
                 $data['code'] = "HTTP/1.1 200 OK";
                 $data["data"] = $list;
