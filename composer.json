@@ -14,6 +14,7 @@
       "Query\\": "src/",
       "DataMapper\\": "src/",
       "Auth\\": "src/",
+      "JWT\\": "src/",
       "AuthController\\": "src/controllers/"
     },
     "files": [

@@ -21,15 +21,12 @@ class UserController extends Controller
             $this->data = new UserMapper();
             $res = $this->data->save($user);
             if ($res) {
-                $data['code'] = "HTTP/1.1 201 Created";
-                response($this->response, $data, 201);
+                response($this->response, "HTTP/1.1 201 Created", 201);
             } else {
                 throw new CustomException("Error in Request Body");
             }
         } catch (CustomException $e) {
-            $data['code'] = "HTTP/1.1 400 Bad Request";
-            $data["message"] = $e->getMessage();
-            response($this->response, $data, 400);
+            response($this->response, "HTTP/1.1 400 Bad Request", 400, $e->getMessage());
         }
     }
 
@@ -39,16 +36,13 @@ class UserController extends Controller
             $this->data = new UserMapper();
             $user = $this->data->fetchOne($id);
             if ($user) {
-                $data['code'] = "HTTP/1.1 200 OK";
-                $data["data"] = array_combine(["id","username", "password"], (array)$user);
-                response($this->response, $data, 200);
+                $data = array_combine(["id","username", "password"], (array)$user);
+                response($this->response, "HTTP/1.1 200 OK", 200, null, $data);
             } else {
                 throw new CustomException("User with ID {$id} Not Found");
             }
         } catch (CustomException $e) {
-            $data['code'] = "HTTP/1.1 404 Not Found";
-            $data["message"] = $e->getMessage();
-            response($this->response, $data, 404);
+            response($this->response, "HTTP/1.1 04 Not Found", 400, $e->getMessage());
         }
     }
 
@@ -62,16 +56,12 @@ class UserController extends Controller
                 foreach ($users as $user) {
                     $list[] = array_combine(["id","username", "password"], (array)$user);
                 }
-                $data['code'] = "HTTP/1.1 200 OK";
-                $data["data"] = $list;
-                response($this->response, $data, 200);
+                response($this->response, "HTTP/1.1 200 OK", 200, null, $list);
             } else {
                 throw new CustomException("No User Found");
             }
         } catch (CustomException $e) {
-            $data['code'] = "HTTP/1.1 404 Not Found";
-            $data["message"] = $e->getMessage();
-            response($this->response, $data, 404);
+            response($this->response, "HTTP/1.1 04 Not Found", 400, $e->getMessage());
         }
     }
 
@@ -83,15 +73,12 @@ class UserController extends Controller
             $this->data = new UserMapper();
             if ($this->data->fetchOne($id)) {
                 $this->data->update($user, $id);
-                $data['code'] = "HTTP/1.1 200 OK";
-                response($this->response, $data, 200);
+                response($this->response, "HTTP/1.1 200 OK", 200);
             } else {
                 throw new CustomException("User with ID {$id} Not Found");
             }
         } catch (CustomException $e) {
-            $data['code'] = "HTTP/1.1 404 Not Found";
-            $data["message"] = $e->getMessage();
-            response($this->response, $data, 404);
+            response($this->response, "HTTP/1.1 04 Not Found", 400, $e->getMessage());
         }
     }
 
@@ -101,15 +88,12 @@ class UserController extends Controller
             $this->data = new UserMapper();
             if ($this->data->fetchOne($id)) {
                 $this->data->delete($id);
-                $data['code'] = "HTTP/1.1 200 OK";
-                response($this->response, $data, 200);
+                response($this->response, "HTTP/1.1 200 OK", 200);
             } else {
                 throw new CustomException("User with ID {$id} Not Found");
             }
         } catch (CustomException $e) {
-            $data['code'] = "HTTP/1.1 404 Not Found";
-            $data["message"] = $e->getMessage();
-            response($this->response, $data, 404);
+            response($this->response, "HTTP/1.1 04 Not Found", 400, $e->getMessage());
         }
     }
 }

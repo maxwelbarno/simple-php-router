@@ -2,10 +2,13 @@
 
 namespace Helpers;
 
-function response($response, $data, $code)
+function response($response, $status, $code, $message = null, $data = null)
 {
+    $content["status"] = $status;
+    $content["data"] = $data;
+    $content["message"] = $message;
     $response->setStatus($code);
-    $response->setContent($data);
+    $response->setContent(array_filter($content));
 }
 
 function clean($data)
