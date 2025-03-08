@@ -33,7 +33,7 @@ class Query
         }
     }
 
-    public function fetchAll()
+    public function findAll()
     {
         try {
             $sql = "SELECT * FROM $this->table";
@@ -43,12 +43,25 @@ class Query
         }
     }
 
-    public function fetchById($id)
+    public function findById($id)
     {
         try {
             $sql = "SELECT * FROM $this->table WHERE $this->primary_key=:id";
             $stmt = $this->conn->prepare($sql);
             $this->bind($stmt, ":id", $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (CustomException $e) {
+            $e->render();
+        }
+    }
+
+    public function findByUsername($username)
+    {
+        try {
+            $sql = "SELECT * FROM $this->table WHERE username=:username";
+            $stmt = $this->conn->prepare($sql);
+            $this->bind($stmt, ":username", $username);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (CustomException $e) {

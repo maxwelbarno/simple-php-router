@@ -12,7 +12,9 @@
       "DB\\": "db/",
       "Model\\": "src/models/",
       "Query\\": "src/",
-      "DataMapper\\": "src/"
+      "DataMapper\\": "src/",
+      "Auth\\": "src/",
+      "AuthController\\": "src/controllers/"
     },
     "files": [
       "helpers/index.php"

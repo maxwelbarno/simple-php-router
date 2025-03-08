@@ -37,7 +37,7 @@ class UserController extends Controller
     {
         try {
             $this->data = new UserMapper();
-            $user = $this->data->findOne($id);
+            $user = $this->data->fetchOne($id);
             if ($user) {
                 $data['code'] = "HTTP/1.1 200 OK";
                 $data["data"] = array_combine(["id","username", "password"], (array)$user);
@@ -56,7 +56,7 @@ class UserController extends Controller
     {
         try {
             $this->data = new UserMapper();
-            $users = $this->data->findAll();
+            $users = $this->data->fetchAll();
             if ($users) {
                 $list = [];
                 foreach ($users as $user) {
@@ -81,7 +81,7 @@ class UserController extends Controller
             $request_body = $this->request->getRequestBody();
             $user = new User(($request_body));
             $this->data = new UserMapper();
-            if ($this->data->findOne($id)) {
+            if ($this->data->fetchOne($id)) {
                 $this->data->update($user, $id);
                 $data['code'] = "HTTP/1.1 200 OK";
                 response($this->response, $data, 200);
@@ -99,7 +99,7 @@ class UserController extends Controller
     {
         try {
             $this->data = new UserMapper();
-            if ($this->data->findOne($id)) {
+            if ($this->data->fetchOne($id)) {
                 $this->data->delete($id);
                 $data['code'] = "HTTP/1.1 200 OK";
                 response($this->response, $data, 200);

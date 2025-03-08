@@ -21,10 +21,12 @@ class UserMapper
 
     public function save(User $user)
     {
+        $password = $user->getPassword();
+        $hash = password_hash($password, PASSWORD_DEFAULT);
         try {
             $data = [
                 "username" => $user->getUsername(),
-                "password" => $user->getPassword()
+                "password" => $hash
             ];
             return $this->query->create($data);
         } catch (CustomException $e) {
@@ -32,11 +34,11 @@ class UserMapper
         }
     }
 
-    public function findAll()
+    public function fetchAll()
     {
         try {
             $list = array();
-            $data = $this->query->fetchAll();
+            $data = $this->query->findAll();
             foreach ($data as $row) {
                 $user = new User($row);
                 $list[] = $user;
@@ -47,10 +49,23 @@ class UserMapper
         }
     }
 
-    public function findOne($id)
+    public function fetchOne($id)
     {
         try {
-            $data = $this->query->fetchById($id);
+            $data = $this->query->findById($id);
+            if ($data) {
+                $user = new User($data);
+                return $user;
+            }
+        } catch (CustomException $e) {
+            $e->render();
+        }
+    }
+
+    public function fetchByUsername($username)
+    {
+        try {
+            $data = $this->query->findByUsername($username);
             if ($data) {
                 $user = new User($data);
                 return $user;
