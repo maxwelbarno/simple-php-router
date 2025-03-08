@@ -10,15 +10,15 @@ class Router
 {
     private array $routes = [];
     private $url;
-    private $http_request_method;
+    private $httpRequestMethod;
     private $response;
-    private $accepted_methods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTION'];
+    private $acceptedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTION'];
 
 
     public function __construct($url, $http_method)
     {
         $this->url = $url;
-        $this->http_request_method = $this->validateHttpMethod($http_method);
+        $this->httpRequestMethod = $this->validateHttpMethod($http_method);
         $this->response = $GLOBALS['response'];
     }
 
@@ -53,7 +53,7 @@ class Router
     {
         // Get the requested route.
         $requestedRoute = $this->url;
-        $routes = $this->routes[$this->http_request_method];
+        $routes = $this->routes[$this->httpRequestMethod];
         $convertToRegex = function ($matches) {
             return isset($matches[1]) ? '(' . $matches[2] . ')' : '([a-zA-Z0-9_-]+)';
         };
@@ -84,7 +84,7 @@ class Router
                 return  $this->resolveCallback($callback, $routeParameters);
             }
         }
-        return $this->abort('Route Not Found');
+        $this->abort('Route Not Found');
     }
 
     private function resolveCallback($callback, $routeParameters)
@@ -104,7 +104,7 @@ class Router
     private function validateHttpMethod($method)
     {
         try {
-            if (in_array(strtoupper($method), $this->accepted_methods)) {
+            if (in_array(strtoupper($method), $this->acceptedMethods)) {
                 return $method;
             }
             throw new CustomException("Invalid HTTP method " . $method);

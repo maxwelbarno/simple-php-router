@@ -9,6 +9,9 @@ use Model\User;
 
 use function Helpers\response;
 
+define("OK", "HTTP/1.1 200 OK");
+define("NOT_FOUND", "HTTP/1.1 404 Not Found");
+
 class UserController extends Controller
 {
     private $data;
@@ -37,12 +40,12 @@ class UserController extends Controller
             $user = $this->data->fetchOne($id);
             if ($user) {
                 $data = array_combine(["id","username", "password"], (array)$user);
-                response($this->response, "HTTP/1.1 200 OK", 200, null, $data);
+                response($this->response, OK, 200, null, $data);
             } else {
                 throw new CustomException("User with ID {$id} Not Found");
             }
         } catch (CustomException $e) {
-            response($this->response, "HTTP/1.1 04 Not Found", 400, $e->getMessage());
+            response($this->response, NOT_FOUND, 404, $e->getMessage());
         }
     }
 
@@ -56,12 +59,12 @@ class UserController extends Controller
                 foreach ($users as $user) {
                     $list[] = array_combine(["id","username", "password"], (array)$user);
                 }
-                response($this->response, "HTTP/1.1 200 OK", 200, null, $list);
+                response($this->response, OK, 200, null, $list);
             } else {
                 throw new CustomException("No User Found");
             }
         } catch (CustomException $e) {
-            response($this->response, "HTTP/1.1 04 Not Found", 400, $e->getMessage());
+            response($this->response, NOT_FOUND, 404, $e->getMessage());
         }
     }
 
@@ -73,12 +76,12 @@ class UserController extends Controller
             $this->data = new UserMapper();
             if ($this->data->fetchOne($id)) {
                 $this->data->update($user, $id);
-                response($this->response, "HTTP/1.1 200 OK", 200);
+                response($this->response, OK, 200);
             } else {
                 throw new CustomException("User with ID {$id} Not Found");
             }
         } catch (CustomException $e) {
-            response($this->response, "HTTP/1.1 04 Not Found", 400, $e->getMessage());
+            response($this->response, NOT_FOUND, 404, $e->getMessage());
         }
     }
 
@@ -88,12 +91,12 @@ class UserController extends Controller
             $this->data = new UserMapper();
             if ($this->data->fetchOne($id)) {
                 $this->data->delete($id);
-                response($this->response, "HTTP/1.1 200 OK", 200);
+                response($this->response, OK, 200);
             } else {
                 throw new CustomException("User with ID {$id} Not Found");
             }
         } catch (CustomException $e) {
-            response($this->response, "HTTP/1.1 04 Not Found", 400, $e->getMessage());
+            response($this->response, NOT_FOUND, 404, $e->getMessage());
         }
     }
 }

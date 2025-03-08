@@ -6,11 +6,14 @@ use DB\Database;
 use Exceptions\CustomException;
 use PDO;
 
+define("USERNAME", ":username");
+
 class Query
 {
     protected $table;
     protected $primary_key;
     private $conn;
+
 
     public function __construct($table, $primary_key)
     {
@@ -25,7 +28,7 @@ class Query
         try {
             $sql = "INSERT INTO $this->table(username, password) VALUES(:username,:password)";
             $stmt = $this->conn->prepare($sql);
-            $this->bind($stmt, ":username", $data['username']);
+            $this->bind($stmt, USERNAME, $data['username']);
             $this->bind($stmt, ":password", $data['password']);
             return $stmt->execute();
         } catch (CustomException $e) {
@@ -61,7 +64,7 @@ class Query
         try {
             $sql = "SELECT * FROM $this->table WHERE username=:username";
             $stmt = $this->conn->prepare($sql);
-            $this->bind($stmt, ":username", $username);
+            $this->bind($stmt, USERNAME, $username);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (CustomException $e) {
@@ -75,7 +78,7 @@ class Query
             $sql = "UPDATE $this->table SET username = :username, password = :password WHERE id = :id";
             $stmt = $this->conn->prepare($sql);
             $this->bind($stmt, ":id", $id);
-            $this->bind($stmt, ":username", $data['username']);
+            $this->bind($stmt, USERNAME, $data['username']);
             $this->bind($stmt, ":password", $data['password']);
             return $stmt->execute();
         } catch (CustomException $e) {

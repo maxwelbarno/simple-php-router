@@ -9,14 +9,14 @@ use Query\Query;
 class UserMapper
 {
     public $table;
-    public $primary_key;
+    public $primaryKey;
     public $query;
 
     public function __construct()
     {
         $this->table = "users";
-        $this->primary_key = "id";
-        $this->query = new Query($this->table, $this->primary_key);
+        $this->primaryKey = "id";
+        $this->query = new Query($this->table, $this->primaryKey);
     }
 
     public function save(User $user)
@@ -54,8 +54,7 @@ class UserMapper
         try {
             $data = $this->query->findById($id);
             if ($data) {
-                $user = new User($data);
-                return $user;
+                return new User($data);
             }
         } catch (CustomException $e) {
             $e->render();
@@ -67,8 +66,7 @@ class UserMapper
         try {
             $data = $this->query->findByUsername($username);
             if ($data) {
-                $user = new User($data);
-                return $user;
+                return new User($data);
             }
         } catch (CustomException $e) {
             $e->render();

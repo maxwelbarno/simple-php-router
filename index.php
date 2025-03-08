@@ -2,7 +2,7 @@
 
 namespace App;
 
-require 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 use AuthController\AuthController;
 use Dotenv\Dotenv;
