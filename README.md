@@ -1,0 +1,1 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=maxwelbarno_simple-php-router&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=maxwelbarno_simple-php-router)
